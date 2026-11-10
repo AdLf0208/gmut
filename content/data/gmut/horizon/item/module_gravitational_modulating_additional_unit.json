@@ -1,0 +1,8 @@
+{
+  "template": "minecraft:paper",
+  "max_stack_size": 1,
+  "rarity": "rare",
+  "components": {
+    "gmut:vertical_speed": "off"
+  }
+}

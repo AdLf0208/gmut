@@ -1,0 +1,9 @@
+// Run a `/gmut` command a player typed in chat.
+fn observe_perform(
+    game: &mut crate::game::Game<'_>,
+    player: &NativeServerPlayer,
+    command: &str,
+    ran: &mut bool,
+) {
+    crate::game::gmut_state::on_perform_command(game, player, command, ran);
+}

@@ -1,0 +1,22 @@
+[package]
+# Port of Gravitational Modulating Additional Unit 6.4
+# (gisellevonbingen-Minecraft/GravitationalModulatingAdditionalUnit,
+# commit aa056b8b58cbb57c0eac34af463fb23eea1beb52, MIT). Minecraft Java
+# 1.21.1 NeoForge; the port targets Horizon 26.3 at the campaign pin.
+# Clean-room Rust rewrite from the mod's behaviour (FINDINGS.md); local-only
+# until publishing is approved, publishable under MIT with this source.
+name = "horizon-gmut"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95"
+license = "MIT"
+description = "Gravitational Modulating Additional Unit for Horizon: the MekaSuit module's item and modes"
+publish = false
+
+[lib]
+# This exact source is also injected as a same-crate module by horizon-mixins.
+path = "mixins/gmut/runtime.rs"
+
+[workspace]
+members = ["tools/audit"]
+resolver = "2"
