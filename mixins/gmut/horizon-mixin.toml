@@ -1,0 +1,103 @@
+[mod]
+id = "gmut"
+version = "0.1.0"
+priority = 100
+
+[compatibility]
+horizon_revision = "1d63e0a5a37a7a708eb0b32b49bf0dfeb28ed8a9"
+
+# The pure mode/rule/gate logic (standalone crate lib, injected as
+# `crate::game::gmut`).
+[[module]]
+id = "runtime"
+file = "crates/horizon-client/src/game.rs"
+name = "gmut"
+source = "runtime.rs"
+
+# Game-side glue: the held stack's component, the placement readout, the
+# commands and the tooltip.
+[[module]]
+id = "state"
+file = "crates/horizon-client/src/game.rs"
+name = "gmut_state"
+source = "support.rs"
+
+# The content half is inside this bundle (`data/gmut-content.hmod`, the built
+# `content/gmut.hmod`): this writes it to `.horizon-cache/` and appends it to the
+# dev-mod list, so one `.hnmod` installs the item and the code. The registry keeps
+# one file per project, so a split port could not be listed; AE2 ships the same
+# pattern.
+[[injection]]
+id = "embedded-content"
+kind = "HEAD"
+cancellable = true
+target = "horizon_client::game::mods::content_root"
+helper = "embedded_content.rs"
+bindings = [
+  { name = "root", ty = "&std::path::Path", value = "root" },
+  { name = "enabled", ty = "&std::collections::BTreeSet<String>", value = "enabled" },
+  { name = "dev", ty = "&[std::path::PathBuf]", value = "dev" },
+]
+
+# Before content loads: register the `gmut:vertical_speed` component id the
+# carried item declares its step in.
+[[injection]]
+id = "component-types"
+hook = "component_types"
+hook_version = 1
+kind = "HEAD"
+helper = "component_types.rs"
+bindings = [
+  { name = "types", ty = "&mut Vec<String>", value = "types" },
+]
+
+# Right click in the air: cycle the step, forward (or back while sneaking) and
+# claim the use, as upstream's keybind changes the mode.
+[[injection]]
+id = "use-item"
+hook = "use_item"
+hook_version = 1
+kind = "HEAD"
+helper = "use_item.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+  { name = "stack", ty = "&horizon_client::items::ItemStack", value = "stack" },
+  { name = "claimed", ty = "&mut bool", value = "claimed" },
+]
+
+# The unit's tooltip: the step it carries and the gate its effects need.
+[[injection]]
+id = "tooltip"
+hook = "tooltip"
+hook_version = 1
+kind = "HEAD"
+helper = "tooltip.rs"
+bindings = [
+  { name = "game", ty = "&crate::game::Game<'_>", value = "self" },
+  { name = "stack", ty = "&horizon_client::items::ItemStack", value = "stack" },
+  { name = "lines", ty = "&mut Vec<(Text, u32)>", value = "lines" },
+]
+
+# `/gmut info|mode|next|prev`: the harness controls the in-game check uses.
+[[injection]]
+id = "register-commands"
+hook = "register_commands"
+hook_version = 1
+kind = "HEAD"
+helper = "register.rs"
+bindings = [
+  { name = "commands", ty = "&mut Vec<NativeCommand>", value = "commands" },
+]
+
+[[injection]]
+id = "perform-command"
+hook = "perform_command"
+hook_version = 1
+kind = "HEAD"
+helper = "perform.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+  { name = "player", ty = "&NativeServerPlayer", value = "player" },
+  { name = "command", ty = "&str", value = "command" },
+  { name = "ran", ty = "&mut bool", value = "ran" },
+]

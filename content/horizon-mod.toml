@@ -1,0 +1,13 @@
+# Port-owned content mod for Gravitational Modulating Additional Unit 6.4 (MIT,
+# gisellevonbingen-Minecraft/GravitationalModulatingAdditionalUnit): the unit
+# item, with the jar's model, texture, names and recipe. The mode component,
+# the toggle, the tooltip and the `/gmut` commands are the native half in
+# ports/gmut/mixins. Local-only until publishing is approved (ARCHITECTURE §8).
+id = "gmut"
+name = "Gravitational Modulating Additional Unit"
+version = "6.4"
+description = "Requires the Gravitational Modulating Unit; provides additional features"
+authors = ["gisellevonbingen"]
+api = "0.2"
+side = "both"
+capabilities = ["registries"]

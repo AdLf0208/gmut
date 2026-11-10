@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_module_gravitational_modulating_unit": {
+      "conditions": {
+        "items": [
+          {
+            "items": "mekanism:module_gravitational_modulating_unit"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "gmut:module_gravitational_modulating_additional_unit"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_module_gravitational_modulating_unit"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "gmut:module_gravitational_modulating_additional_unit"
+    ]
+  }
+}
